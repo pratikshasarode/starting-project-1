@@ -4,16 +4,17 @@ import { fetchEvents } from "../../util/http";
 import LoadingIndicator from "../UI/LoadingIndicator";
 import ErrorBlock from "../UI/ErrorBlock";
 import EventItem from "./EventItem";
+import { events } from "../../../data/events";
 
 export default function FindEventSection() {
   const searchElement = useRef();
   const [searchTerm, setSearchTerm] = useState(undefined);
-
-  const { data, isError, error, isPending, isLoading } = useQuery({
-    queryKey: ["events", { search: searchTerm }],
-    queryFn: ({ signal }) => fetchEvents({ signal, searchTerm }),
-    enabled: searchTerm !== undefined,
-  });
+  const [data, setData] = useState(events);
+  // const { data, isError, error, isPending, isLoading } = useQuery({
+  //   queryKey: ["events", { search: searchTerm }],
+  //   queryFn: ({ signal }) => fetchEvents({ signal, searchTerm }),
+  //   enabled: searchTerm !== undefined,
+  // });
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -22,18 +23,18 @@ export default function FindEventSection() {
 
   let content = <p>Please enter a search term and to find events</p>;
 
-  if (isLoading) {
-    content = <LoadingIndicator />;
-  }
+  // if (isLoading) {
+  //   content = <LoadingIndicator />;
+  // }
 
-  if (isError) {
-    content = (
-      <ErrorBlock
-        title={"An error occurred"}
-        message={error.info?.message || "Failed to fetch evnets"}
-      />
-    );
-  }
+  // if (isError) {
+  //   content = (
+  //     <ErrorBlock
+  //       title={"An error occurred"}
+  //       message={error.info?.message || "Failed to fetch evnets"}
+  //     />
+  //   );
+  // }
 
   if (data) {
     content = (

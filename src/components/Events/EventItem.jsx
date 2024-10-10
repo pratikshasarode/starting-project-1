@@ -1,14 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import buzzingcity from "./../../../images/buzzingcity.jpg";
+import laptopondesk from "./../../../images/laptopondesk.jpg";
+import meetingnetworking from "./../../../images/meetingnetworking.jpg";
+import park from "./../../../images/park.jpg";
+import womencoding from "./../../../images/womencoding.jpg";
 
 export default function EventItem({ event }) {
-  const formattedDate = new Date(event.date).toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+  const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
   });
+
   return (
     <article className="event-item">
-      <img src={`http://localhost:3000/${event.image}`} alt={event.title} />
+      <img src={event.image} alt={event.title} />
       <div className="event-item-content">
         <div>
           <h2>{event.title}</h2>

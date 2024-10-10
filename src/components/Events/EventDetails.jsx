@@ -4,33 +4,50 @@ import Header from "../Header.jsx";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { deleteEvent, fetchEvent, queryClient } from "../../util/http.js";
 import ErrorBlock from "../UI/ErrorBlock.jsx";
-import { useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Modal from "./../UI/Modal.jsx";
+import { events } from "../../../data/events.js";
 
 export default function EventDetails() {
   const [isdeletying, setIsDeleting] = useState(false);
   const { id } = useParams();
+  const [ data, setdata] = useState()
   const navigate = useNavigate();
-  const { data, isError, error, isPending } = useQuery({
-    queryKey: ["event", id],
-    queryFn: ({ signal }) => fetchEvent({ id, signal }),
-  });
 
-  const {
-    mutate,
-    isPending: isPendingDeletion,
-    isError: isErroRDeleting,
-    error: deleteError,
-  } = useMutation({
-    mutationFn: deleteEvent,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["events"],
-        refetchType: "none",
-      });
-      navigate("/events");
-    },
-  });
+  console.log('id', id)
+  // const { data, isError, error, isPending } = useQuery({
+  //   queryKey: ["event", id],
+  //   queryFn: ({ signal }) => fetchEvent({ id, signal }),
+  // });
+
+  // const {
+  //   mutate,
+  //   isPending: isPendingDeletion,
+  //   isError: isErroRDeleting,
+  //   error: deleteError,
+  // } = useMutation({
+  //   mutationFn: deleteEvent,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({
+  //       queryKey: ["events"],
+  //       refetchType: "none",
+  //     });
+  //     navigate("/events");
+  //   },
+  // });
+
+const fetchEvent =  async () => {
+  const filtertedEvent = events.filter((item) => item?.id === id)
+  console.log("filtertedEvent", filtertedEvent)
+  setdata(filtertedEvent[0])
+}
+  useEffect(() => {
+    fetchEvent()
+  } , [])
+
+
+
+
 
   function handleStartDelete() {
     setIsDeleting(true);
@@ -66,7 +83,7 @@ export default function EventDetails() {
               </>
             )}
           </div>
-          {isErroRDeleting && (
+          {/* {isErroRDeleting && (
             <ErrorBlock
               title={"Failedto delete event"}
               message={
@@ -74,7 +91,7 @@ export default function EventDetails() {
                 "failed to delete event ,try again letter"
               }
             />
-          )}
+          )} */}
         </Modal>
       )}
       <Outlet />
@@ -84,13 +101,13 @@ export default function EventDetails() {
         </Link>
       </Header>
 
-      {isPending && <p style={{ textAlign: "center" }}>Loading...</p>}
+      {/* {isPending && <p style={{ textAlign: "center" }}>Loading...</p>}
       {isError && (
         <ErrorBlock
           title={"Failed to fetch Event Details"}
           message={error?.info.message}
         />
-      )}
+      )} */}
 
       {data && (
         <article id="event-details">
@@ -102,7 +119,7 @@ export default function EventDetails() {
             </nav>
           </header>
           <div id="event-details-content">
-            <img src={`http://localhost:3000/${data?.image}`} alt="" />
+            <img src={data?.image} alt="" />
             <div id="event-details-info">
               <div>
                 <p id="event-details-location">{data?.location}</p>

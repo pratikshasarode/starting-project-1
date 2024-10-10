@@ -4,29 +4,31 @@ import LoadingIndicator from "../UI/LoadingIndicator.jsx";
 import ErrorBlock from "../UI/ErrorBlock.jsx";
 import EventItem from "./EventItem.jsx";
 import { fetchEvents } from "../../util/http.js";
+import { events } from "../../../data/events.js";
 
 export default function NewEventsSection() {
-  const { data, error, isError, isLoading, isPending } = useQuery({
-    queryKey: ["events"],
-    queryFn: fetchEvents,
-    //     staleTime: 5000,
-    //     cacheTime: 30000,
-  }); // useQuery sends http request behind the sences
+  const [data, setData] = useState(events);
+  // const { data, error, isError, isLoading, isPending } = useQuery({
+  //   queryKey: ["events"],
+  //   queryFn: fetchEvents,
+  //   //     staleTime: 5000,
+  //   //     cacheTime: 30000,
+  // }); // useQuery sends http request behind the sences
 
   let content;
 
-  if (isPending) {
-    content = <LoadingIndicator />;
-  }
+  // if (isPending) {
+  //   content = <LoadingIndicator />;
+  // }
 
-  if (isError) {
-    content = (
-      <ErrorBlock
-        title="An error occurred"
-        message={error.info?.message || "Failed to fetch events."}
-      />
-    );
-  }
+  // if (isError) {
+  //   content = (
+  //     <ErrorBlock
+  //       title="An error occurred"
+  //       message={error.info?.message || "Failed to fetch events."}
+  //     />
+  //   );
+  // }
 
   if (data) {
     content = (
